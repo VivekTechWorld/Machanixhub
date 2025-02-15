@@ -5,6 +5,8 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 export type RootStackParamList = {
   Login: undefined;
   Home: undefined;
+  AfLogin: undefined;
+  Register: undefined;
 };
 
 // ✅ Create a reusable type for navigation props

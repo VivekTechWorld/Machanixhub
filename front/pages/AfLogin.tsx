@@ -37,7 +37,7 @@ const AfLogin: React.FC<NavigationProps<'AfLogin'>> = ({ navigation }) => {
 
   const handleLogin = () => {
     if (selectedRole === 'Mechanic') {
-      navigation.navigate('Login');
+      navigation.navigate('Register');
     } else {
       navigation.navigate('Home');
     }
