@@ -1,15 +1,33 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('./config/db');
+const express=require('express');
+const mongoose=require('mongoose');
+const dotenv=require('dotenv');
+const cors=require('cors');
 
-const app = express();
-app.use(cors());
+
+const mechanicRoutes=require('./routes/mechanicRoutes'); 
+const vehicleOwnerRoutes=require('./routes/vehicleOwnerRoutes');
+
+dotenv.config();
+const app=express();
+
 app.use(express.json());
+app.use(cors());
 
-// Routes
-const userRoutes = require('./routes/userRoutes');
-app.use('/api/users', userRoutes);
+mongoose.connect(process.env.MONGO_URI,
+    {useNewUrlParser:true,
+    useUnifiedTopology:true,
+    }).then(()=>console.log("Mongodb connected "))
+    .catch((err)=>console.log(err));
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
+app.use('/api/mechanic',mechanicRoutes);
+app.use('/api/vehicleOwner',vehicleOwnerRoutes);
+
+//server start
+const PORT=process.env.PORT || 5000;
+app.listen(PORT, () =>
+    console.log(`Server is running on http://192.168.1.100:${PORT}`)
+  );
+
+
+
