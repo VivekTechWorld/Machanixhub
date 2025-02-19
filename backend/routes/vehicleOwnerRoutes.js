@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const VechicleOwner = require('../models/VechicleOwner');
-
+const jwt = require("jsonwebtoken");
 const router = express.Router();
 
 router.post('/register',async(req,res)=>
@@ -43,6 +43,48 @@ router.post('/register',async(req,res)=>
     }
 
 
+});
+
+
+
+//mechanic login
+router.post('/login', async (req, res) => {
+    try {
+        console.log("📩 Received request body:", req.body);  
+
+        const { email, password } = req.body;
+        console.log("🔍 Extracted email:", email);
+        console.log("🔑 Extracted password:", password);
+
+        if (!email || !password) {
+            console.log("❌ Missing email or password:", { email, password });
+            return res.status(400).json({ message: "Email and password are required" });
+        }
+
+        // 🛠️ Fetch mechanic from DB
+        const VehicleOwner = await VechicleOwner.findOne({ email });
+        console.log("🛠️ Fetched Mechanic:", VechicleOwner); // Debugging line
+
+        if (!VehicleOwner) {
+            return res.status(400).json({ message: "Invalid credentials" });
+        }
+
+        console.log("🔑 Stored Password in DB:", VehicleOwner.password);
+
+        // Compare passwords
+        const isMatch = await bcrypt.compare(password, VehicleOwner.password);
+
+        if (!isMatch) {
+            return res.status(400).json({ message: "Invalid credentials" });
+        }
+
+        const token = jwt.sign({ id: VechicleOwner._id }, 'yourSecretKey', { expiresIn: '1h' });
+
+        res.status(200).json({ message: "Login successful", token });
+    } catch (error) {
+        console.error("🚨 Server Error:", error);
+        res.status(500).json({ message: "Something went wrong", error: error.message });
+    }
 });
 
 module.exports=router;

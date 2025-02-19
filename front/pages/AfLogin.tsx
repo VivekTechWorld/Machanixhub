@@ -26,20 +26,52 @@
 // export default AfLogin;
 
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { NavigationProps } from '../src/navigationTypes';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 const AfLogin: React.FC<NavigationProps<'AfLogin'>> = ({ navigation }) => {
   const [selectedRole, setSelectedRole] = useState<'Mechanic' | 'VehicleOwner'>('Mechanic');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    if (selectedRole === 'Mechanic') {
-      navigation.navigate('Register');
-    } else {
-      navigation.navigate('Home');
+  const handleLogin = async () => {
+    
+    try
+    {
+      console.log("📨 Sending Login Request:", { email, password }); // Debugging line
+      const apiUrl=
+      selectedRole === "Mechanic"
+          ? "http://10.0.2.2:5000/api/mechanic/login"
+          : "http://10.0.2.2:5000/api/vehicleOwner/login";
+
+          const response=await fetch(apiUrl,{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({email,password})
+          });
+
+          const data= await response.json();
+          console.log("📨 Login Response:",data); // Debugging line
+          if(response.ok)
+          {
+            await AsyncStorage.setItem("authToken",data.token);
+
+            Alert.alert("Login Successful","",[
+              {text:"OK",onPress:()=>navigation.navigate("Home")}
+            ]);
+          }
+          else
+          {
+            Alert.alert("Error",data.message || "Invalid login credentials");
+          }        
+    }
+    catch(error)
+    {
+      console.error(error);
+      Alert.alert("Error","Something went wrong");
     }
   };
 

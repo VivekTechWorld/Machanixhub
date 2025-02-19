@@ -53,7 +53,14 @@ const RegisterScreen: React.FC<NavigationProps<'Register'>> = ({ navigation }) =
       }
   
       if (response.ok) {
-        Alert.alert("Registration Successful!");
+        Alert.alert(
+          "Registration Successful!",
+          "",
+          [
+            { text: "OK", onPress: () => navigation.navigate("AfLogin") }
+          ]
+        );
+        
       } else {
         Alert.alert(`Error: ${data.message}`);
       }
