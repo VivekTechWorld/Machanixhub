@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const VechicleOwner = require('../models/VechicleOwner');
 const jwt = require("jsonwebtoken");
 const router = express.Router();
-
+const { forgetPassword, resetPassword } = require("../controllers/mechanicController");
 router.post('/register',async(req,res)=>
 {
     try
@@ -33,16 +33,12 @@ router.post('/register',async(req,res)=>
         await newVehicleOwner.save();
         console.log("Mechanic registered successfully:", email); // Log success
         res.status(201).json({message:"VechicleOwner registered successfully"});
-
-
     }
     catch(error)
     {
         console.error("Registration error:", error); // Log errors
         res.status(500).json({message:"Something went wrong",error:error.message});
     }
-
-
 });
 
 
@@ -86,5 +82,8 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ message: "Something went wrong", error: error.message });
     }
 });
+
+router.post('/forgot-password',forgetPassword);
+router.post('/reset-password',resetPassword);
 
 module.exports=router;

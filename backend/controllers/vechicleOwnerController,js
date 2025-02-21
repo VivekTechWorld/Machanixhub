@@ -1,0 +1,59 @@
+const bcrypt = require('bcryptjs');
+const  VechicleOwner= require('../models/VechicleOwner');
+const sendEmail = require('../utils/sendmail');
+const jwt = require('jsonwebtoken');
+require("dotenv").config();
+
+exports.forgetPassword = async (req, res) => {
+
+    try
+    {
+        const {email}=req.body;
+        const VechicleOwner=await VechicleOwner.findOne({email});
+
+        if(!VechicleOwner)
+        {
+            return res.status(400).json({message:"Mechanic not found"});
+        }
+
+        const token =jwt.sign({id:mechanic._id},process.env.JWT_SECRET,{expiresIn:"10m"});
+        VechicleOwner.resetToken=token;
+        VechicleOwner.resetTokenExpire=Date.now()+10*60*1000;
+        await VechicleOwner.save();
+
+        const resetlink=`http://10.0.2.2:5000/api/mechanic/forgot-password?token=${token}&userType=mechanic`;
+        await sendEmail(email,"Password reset link",`<p>Click <a href="${resetlink}">here</a> to reset your password</p>`);
+
+        res.json({message :"Reset email sent"});
+    }
+    catch(error)
+    {
+        res.status(500).json({message:"Something went wrong in mechanic",error:error.message});
+    }
+
+};
+
+exports.resetPassword = async (req, res) => {
+
+    try
+    {
+        const {token,newPassword}=req.body;
+        const VechicleOwner=await VechicleOwner.findOne({resetToken:token, resetTokenExpiry:{$gt : Date.now()}});
+
+        if(!VechicleOwner)
+        {
+            return res.status(400).json({message: "Invalid or expired token"});
+        }
+
+        VechicleOwner.password=await bcrypt.hash(newPassword,10);
+        VechicleOwner.resetToken=null;
+        VechicleOwner.resetTokenExpiry=null;
+        await VechicleOwner.save();
+
+        res.json({message: "Passwowrd reset successfull"});
+    }
+    catch(error)
+    {
+        res.status(500).json({message:"Server error",error:error.message});
+    }   
+};

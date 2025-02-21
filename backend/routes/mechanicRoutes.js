@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const Mechanic = require('../models/Mechanic');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-
+const { forgetPassword, resetPassword } = require("../controllers/mechanicController");
 //mechanic registration 
 router.post('/register',async(req,res)=>
 {
@@ -79,5 +79,9 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ message: "Something went wrong", error: error.message });
     }
 });
+
+router.post('/forgot-password',forgetPassword);
+router.post('/reset-password',resetPassword);
+
 
 module.exports= router;

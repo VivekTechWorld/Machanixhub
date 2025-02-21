@@ -123,6 +123,14 @@ const AfLogin: React.FC<NavigationProps<'AfLogin'>> = ({ navigation }) => {
       >
         <Text style={styles.buttonText}>Continue as {selectedRole}</Text>
       </TouchableOpacity>
+
+      {/* Navigation to Login */}
+      <Text style={styles.ForgetPasswordText}>
+        <Text style={styles.ForgetPasswordButton} onPress={() => navigation.navigate("ForgetPassword")}>Forget Password?</Text>
+      </Text>
+
+
+
     </View>
   );
 };
@@ -180,6 +188,23 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
+  ForgetPasswordContainer:{
+    marginTop: 20, // increased margin for better spacing
+    alignItems: 'flex-end', //Align to the right.
+    paddingRight: 10, // add some padding to the right for better spacing.
+},
+ForgetPasswordText: {
+    fontSize: 16, // Increased font size
+    fontWeight: '600', // Slightly bolder
+    color: '##0f0c04', // A vibrant blue (you can customize this)
+    textDecorationLine: 'underline', // Underline to indicate a link
+    cursor: 'pointer', // Indicates it's clickable (for web)
+    paddingVertical: 5, // add some padding to the top and bottom.
+},
+ForgetPasswordButton:{
+    color: '##0f0c04', // a darker blue for hover effect.
+}
+
 });
 
 export default AfLogin;

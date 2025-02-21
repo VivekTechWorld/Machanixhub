@@ -7,6 +7,8 @@ export type RootStackParamList = {
   Home: undefined;
   AfLogin: undefined;
   Register: undefined;
+  ForgetPassword: undefined;
+  ResetPasswordScreen : undefined;
 };
 
 // ✅ Create a reusable type for navigation props
