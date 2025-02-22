@@ -7,8 +7,8 @@ const Mechanic=new mongoose.Schema(
     phone : {type:String,required: true,unique:true},
     email : {type:String , required :true , unitque : true},
     password : { type:String , required:true},
-    resetToken: String,
-    resetTokenExpiry: Date
+    resetToken: {type :String},
+    resetTokenExpiry: {type :Date},
   },
   {timestamps : true}
 

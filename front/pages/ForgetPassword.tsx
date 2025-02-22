@@ -13,12 +13,12 @@ const ForgetPasswordScreen: React.FC<NavigationProps<'ForgetPassword'>> = ({ nav
         const endpoint =
           userType === "mechanic"
             ? "http://10.0.2.2:5000/api/mechanic/forgot-password"
-            : "http://10.0.2.2:5000/api/vehicle-owner/forgot-password";
+            : "http://10.0.2.2:5000/api/vehicleOwner/forgot-password";
     
         try {
           const response = await fetch(endpoint, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json" },  
             body: JSON.stringify({ email }),
           });
           console.log(response);

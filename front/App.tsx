@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer,LinkingOptions  } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './pages/LoginScreen';
 import HomeScreen from './pages/HomeScreen';
@@ -11,9 +11,32 @@ import { RootStackParamList } from './src/navigationTypes';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
+// Configure Deep Linking
+const linking: LinkingOptions<RootStackParamList> = {
+  prefixes: ['mechanixhub://', 'resetpassword/${token}'], // Adjust according to your app's domain
+  config: {
+    screens: {
+      Login: 'login',
+      Home: 'home',
+      AfLogin: 'aflogin',
+      Register: 'register',
+      ForgetPassword: 'forgetpassword',
+      // ResetPasswordScreen: 'resetpassword/:token', // Capture token from URL
+      ResetPasswordScreen: {
+        path: 'resetpassword/:token',  // Capture token
+        parse: {
+          token: (token: string) => token,
+          userType: (userType: string) => userType, // Capture userType from query params
+        },
+      },
+    },
+  },
+};
+
+
 export default function App() {
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking} fallback={'Login'}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />

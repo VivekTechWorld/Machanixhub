@@ -56,7 +56,6 @@ router.post('/login', async (req, res) => {
 
         // 🛠️ Fetch mechanic from DB
         const mechanic = await Mechanic.findOne({ email });
-        console.log("🛠️ Fetched Mechanic:", mechanic); // Debugging line
 
         if (!mechanic) {
             return res.status(400).json({ message: "Invalid credentials" });
@@ -69,7 +68,7 @@ router.post('/login', async (req, res) => {
 
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid credentials" });
-        }
+        }   
 
         const token = jwt.sign({ id: mechanic._id }, 'yourSecretKey', { expiresIn: '1h' });
 
@@ -82,6 +81,18 @@ router.post('/login', async (req, res) => {
 
 router.post('/forgot-password',forgetPassword);
 router.post('/reset-password',resetPassword);
+router.get('/redirect', (req, res) => {
+    const { token, userType } = req.query;
 
+    if (!token || !userType) {
+        return res.status(400).json({ message: "Invalid request" });
+    }
+
+    // ✅ Modify to include userType in deep link
+    const deepLink = `mechanixhub://resetpassword/${token}?userType=${userType}`;
+
+    // Redirect to app deep link
+    res.redirect(deepLink);
+});
 
 module.exports= router;

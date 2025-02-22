@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const VechicleOwner = require('../models/VechicleOwner');
 const jwt = require("jsonwebtoken");
 const router = express.Router();
-const { forgetPassword, resetPassword } = require("../controllers/mechanicController");
+const { forgetPassword, resetPassword } = require("../controllers/vechicleOwnerController");
 router.post('/register',async(req,res)=>
 {
     try
@@ -86,4 +86,17 @@ router.post('/login', async (req, res) => {
 router.post('/forgot-password',forgetPassword);
 router.post('/reset-password',resetPassword);
 
+router.get('/redirect', (req, res) => {
+    const { token, userType } = req.query;
+
+    if (!token || !userType) {
+        return res.status(400).json({ message: "Invalid request" });
+    }
+
+    // ✅ Modify to include userType in deep link
+    const deepLink = `mechanixhub://resetpassword/${token}?userType=${userType}`;
+
+    // Redirect to app deep link
+    res.redirect(deepLink);
+});
 module.exports=router;

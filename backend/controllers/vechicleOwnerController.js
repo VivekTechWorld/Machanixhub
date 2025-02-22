@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const Mechanic = require('../models/Mechanic');
+const  VechicleOwner= require('../models/VechicleOwner');
 const sendEmail = require('../utils/sendmail');
 const jwt = require('jsonwebtoken');
 require("dotenv").config();
@@ -9,22 +9,21 @@ exports.forgetPassword = async (req, res) => {
     try
     {
         const {email}=req.body;
-        const mechanic=await Mechanic.findOne({email});
 
-        if(!mechanic)
+        const vehicleowner=await VechicleOwner.findOne({email});
+        console.log(vehicleowner);
+        if(!VechicleOwner)
         {
             return res.status(400).json({message:"Mechanic not found"});
         }
 
-        const token =jwt.sign({id:mechanic._id},process.env.JWT_SECRET,{expiresIn:"10m"});
+        const token =jwt.sign({id:vehicleowner._id},process.env.JWT_SECRET,{expiresIn:"10m"});
         console.log(token);
-        mechanic.resetToken=token;
-        mechanic.resetTokenExpiry=Date.now()+10*60*1000;
-        await mechanic.save();
+        vehicleowner.resetToken=token;
+        vehicleowner.resetTokenExpiry=Date.now()+10*60*1000;
+        await vehicleowner.save();
 
-        // const resetlink=`http://10.0.2.2:5000/api/mechanic/reset-password?token=${token}&userType=mechanic`;
-        // const resetLink = `http://10.0.2.2:5000/api/mechanic/redirect?token=${token}`;
-        const resetLink = `http://10.0.2.2:5000/api/mechanic/redirect?token=${token}&userType=mechanic`;
+        const resetLink = `http://10.0.2.2:5000/api/vehicleOwner/redirect?token=${token}&userType=VechicleOwner`;
         await sendEmail(email,"Password reset link",`<p>Click <a href="${resetLink}">here</a> to reset your password</p>`);
 
         res.json({message :"Reset email sent"});
@@ -33,6 +32,7 @@ exports.forgetPassword = async (req, res) => {
     {
         res.status(500).json({message:"Something went wrong in mechanic",error:error.message});
     }
+
 };
 
 exports.resetPassword = async (req, res) => {
@@ -42,17 +42,17 @@ exports.resetPassword = async (req, res) => {
         const {token,newPassword}=req.body;
         console.log(token);
         console.log(newPassword);
-        const mechanic=await Mechanic.findOne({resetToken:token, resetTokenExpiry:{$gt : Date.now()}});
-
-        if(!mechanic)
+        const vehicleowner=await VechicleOwner.findOne({resetToken:token,resetTokenExpiry:{$gt : Date.now()}});
+        console.log(vehicleowner);
+        if(!vehicleowner)
         {
             return res.status(400).json({message: "Invalid or expired token"});
         }
 
-        mechanic.password=await bcrypt.hash(newPassword,10);
-        mechanic.resetToken=null;
-        mechanic.resetTokenExpiry=null;
-        await mechanic.save();
+        vehicleowner.password=await bcrypt.hash(newPassword,10);
+        vehicleowner.resetToken=null;
+        vehicleowner.resetTokenExpiry=null;
+        await vehicleowner.save();
 
         res.json({message: "Passwowrd reset successfull"});
     }

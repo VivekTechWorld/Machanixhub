@@ -54,7 +54,6 @@ const AfLogin: React.FC<NavigationProps<'AfLogin'>> = ({ navigation }) => {
           });
 
           const data= await response.json();
-          console.log("📨 Login Response:",data); // Debugging line
           if(response.ok)
           {
             await AsyncStorage.setItem("authToken",data.token);
