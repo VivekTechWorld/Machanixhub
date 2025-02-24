@@ -81,6 +81,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/forgot-password',forgetPassword);
 router.post('/reset-password',resetPassword);
+
 router.get('/redirect', (req, res) => {
     const { token, userType } = req.query;
 

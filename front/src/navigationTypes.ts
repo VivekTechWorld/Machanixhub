@@ -9,6 +9,8 @@ export type RootStackParamList = {
   Register: undefined;
   ForgetPassword: undefined;
   ResetPasswordScreen : undefined;
+  VehicleOwnerHome : undefined;
+  MechanicHome : undefined; 
 };
 
 // ✅ Create a reusable type for navigation props

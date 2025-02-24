@@ -58,23 +58,26 @@ router.post('/login', async (req, res) => {
         }
 
         // 🛠️ Fetch mechanic from DB
-        const VehicleOwner = await VechicleOwner.findOne({ email });
-        console.log("🛠️ Fetched Mechanic:", VechicleOwner); // Debugging line
+        const vehicleOwner = await VechicleOwner.findOne({ email });
+        console.log("🛠️ Fetched Mechanic:", vehicleOwner); // Debugging line
 
-        if (!VehicleOwner) {
+        if (!vehicleOwner) {
             return res.status(400).json({ message: "Invalid credentials" });
         }
 
-        console.log("🔑 Stored Password in DB:", VehicleOwner.password);
+        console.log("🔑 Stored Password in DB:", vehicleOwner.password);
 
         // Compare passwords
-        const isMatch = await bcrypt.compare(password, VehicleOwner.password);
+        const isMatch = await bcrypt.compare(password, vehicleOwner.password);
 
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid credentials" });
         }
 
-        const token = jwt.sign({ id: VechicleOwner._id }, 'yourSecretKey', { expiresIn: '1h' });
+        const token = jwt.sign({ vehicleOwnerId: vehicleOwner._id }, process.env.JWT_SECRET, {
+            expiresIn: "1h", // Token expires in 1 hour
+          });
+          console.log("🔑 Token generated:", token);
 
         res.status(200).json({ message: "Login successful", token });
     } catch (error) {

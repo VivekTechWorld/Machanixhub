@@ -57,9 +57,9 @@ const AfLogin: React.FC<NavigationProps<'AfLogin'>> = ({ navigation }) => {
           if(response.ok)
           {
             await AsyncStorage.setItem("authToken",data.token);
-
+            await AsyncStorage.setItem("userRole", selectedRole); // Store user role
             Alert.alert("Login Successful","",[
-              {text:"OK",onPress:()=>navigation.navigate("Home")}
+              {text:"OK",onPress:()=>navigation.navigate(selectedRole==="Mechanic"?"MechanicHome":"VehicleOwnerHome")}
             ]);
           }
           else

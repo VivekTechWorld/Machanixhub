@@ -6,6 +6,9 @@ const cors=require('cors');
 
 const mechanicRoutes=require('./routes/mechanicRoutes'); 
 const vehicleOwnerRoutes=require('./routes/vehicleOwnerRoutes');
+// const serviceRoutes=require('./routes/serviceRoutes');
+const locationRoutes = require("./routes/locationRoutes");
+
 
 dotenv.config();
 const app=express();
@@ -22,12 +25,15 @@ mongoose.connect(process.env.MONGO_URI,
 
 app.use('/api/mechanic',mechanicRoutes);
 app.use('/api/vehicleOwner',vehicleOwnerRoutes);
+// app.use('/api',serviceRoutes);
+app.use("/api", locationRoutes);
+
 
 //server start
 const PORT=process.env.PORT || 5000;
 app.listen(PORT, () =>
     console.log(`Server is running on http://192.168.1.100:${PORT}`)
-  );
+);
 
 
 
