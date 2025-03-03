@@ -4,6 +4,7 @@ const Location = require("../models/Location");
 exports.saveLocation = async (req, res) => {
   try {
     const { latitude, longitude } = req.body;
+    console.log("latitude", latitude);
 
     if (!latitude || !longitude) {
       return res.status(400).json({ message: "Latitude and Longitude are required." });

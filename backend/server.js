@@ -3,15 +3,15 @@ const mongoose=require('mongoose');
 const dotenv=require('dotenv');
 const cors=require('cors');
 
-
 const mechanicRoutes=require('./routes/mechanicRoutes'); 
 const vehicleOwnerRoutes=require('./routes/vehicleOwnerRoutes');
 // const serviceRoutes=require('./routes/serviceRoutes');
 const locationRoutes = require("./routes/locationRoutes");
-
+const MechanicProfileRoutes = require("./routes/MechanicProfileRoutes");
 
 dotenv.config();
 const app=express();
+
 
 app.use(cors());
 app.use(express.json());
@@ -27,7 +27,7 @@ app.use('/api/mechanic',mechanicRoutes);
 app.use('/api/vehicleOwner',vehicleOwnerRoutes);
 // app.use('/api',serviceRoutes);
 app.use("/api", locationRoutes);
-
+app.use("/api/mechanic", MechanicProfileRoutes);
 
 //server start
 const PORT=process.env.PORT || 5000;

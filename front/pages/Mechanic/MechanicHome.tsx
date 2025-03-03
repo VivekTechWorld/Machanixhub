@@ -6,12 +6,12 @@ import { useEffect } from 'react';
 
 
 
-const MechanicHome: React.FC<NavigationProps<'MechanicHome'>> = ({ navigation }) => {
+const MechanicHome: React.FC<{ navigation: any }> = ({ navigation }) => {
   useEffect(() => {
     const checkAuth = async () => {
       const token = await AsyncStorage.getItem("authToken");
       if (!token) {
-        navigation.replace("AfLogin"); // Redirect if no token
+        navigation.navigate("AfLogin"); // Redirect if no token
       }
     };
     checkAuth();
