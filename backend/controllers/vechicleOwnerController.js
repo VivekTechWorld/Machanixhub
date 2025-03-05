@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const  VechicleOwner= require('../models/VechicleOwner');
 const sendEmail = require('../utils/sendmail');
 const jwt = require('jsonwebtoken');
+const MechanicProfile = require("../models/MechanicProfile");
 require("dotenv").config();
 
 exports.forgetPassword = async (req, res) => {
@@ -60,4 +61,31 @@ exports.resetPassword = async (req, res) => {
     {
         res.status(500).json({message:"Server error",error:error.message});
     }   
+};
+
+
+
+
+exports.findKNearestMechanics = async (req, res) => {
+    try {
+        const { latitude, longitude } = req.query;
+    
+        const nearestMechanic = await MechanicProfile.find({
+          location: {
+            $near: {
+              $geometry: { type: "Point", coordinates: [parseFloat(longitude), parseFloat(latitude)] },
+              $maxDistance: 10 * 1000, // 10 km radius
+            },
+          },
+        });
+    
+        if (!nearestMechanic) {
+          return res.status(404).json({ success: false, message: "No nearby mechanic found" });
+        }
+    
+        res.json({ success: true, mechanic: nearestMechanic });
+      } catch (error) {
+        res.status(500).json({ success: false, message: "Error fetching mechanic", error });
+      }
+
 };

@@ -182,6 +182,7 @@
 // });
 
 // export default HomeScreen;
+
 import React, { useEffect, useState, useRef } from "react";
 import { 
   View, Text, StyleSheet, Button, Alert, ActivityIndicator, Platform 

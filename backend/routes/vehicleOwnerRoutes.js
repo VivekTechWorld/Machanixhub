@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const VechicleOwner = require('../models/VechicleOwner');
 const jwt = require("jsonwebtoken");
 const router = express.Router();
-const { forgetPassword, resetPassword } = require("../controllers/vechicleOwnerController");
+const { forgetPassword, resetPassword,findKNearestMechanics } = require("../controllers/vechicleOwnerController");
 router.post('/register',async(req,res)=>
 {
     try
@@ -88,6 +88,14 @@ router.post('/login', async (req, res) => {
 
 router.post('/forgot-password',forgetPassword);
 router.post('/reset-password',resetPassword);
+
+router.get('/nearest', findKNearestMechanics);
+
+
+
+
+
+
 
 router.get('/redirect', (req, res) => {
     const { token, userType } = req.query;

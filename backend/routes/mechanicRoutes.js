@@ -71,7 +71,7 @@ router.post('/login', async (req, res) => {
         }   
 
         const token = jwt.sign({ id: mechanic._id }, 'yourSecretKey', { expiresIn: '1h' });
-
+        console.log('mechanicid ',mechanic._id);
         res.status(200).json({ message: "Login successful", token });
     } catch (error) {
         console.error("🚨 Server Error:", error);

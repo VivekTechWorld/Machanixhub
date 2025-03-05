@@ -16,6 +16,9 @@ export type RootStackParamList = {
   MechanicDrawer: undefined; // Add this line
   DrawerNavigator: undefined; // ✅ Add this line
   MechanicOwnerDrawer :undefined;
+  SelectLocationScreen :undefined;
+  VehicleOwnerTabs :undefined;
+  MessagingScreen : undefined;
 };
 
 // ✅ Create a reusable type for navigation props

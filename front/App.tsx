@@ -224,6 +224,10 @@
 // };
 
 // export default App;
+
+
+
+
 import React, { useEffect, useState } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -242,6 +246,12 @@ import MechanicHome from "./pages/Mechanic/MechanicHome";
 import MechanicProfileScreen from "./pages/Mechanic/MechanicProfileScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import { RootStackParamList } from "./src/navigationTypes";
+import SelectLocationScreen from "./pages/SelectLocationScreen"; // Import the location screen
+import VehicleOwnerTabs from "./pages/navigation/VehicleOwnerTabs"; // Import the VehicleOwnerTabs screen
+import MessagingScreen from "./pages/MessagingScreen"; // Import the Messaging screen
+
+
+
 
 const Stack = createStackNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator();
@@ -268,7 +278,8 @@ const linking: LinkingOptions<RootStackParamList> = {
 
 const VehicleOwnerDrawer = () => {
   return (
-    <Drawer.Navigator initialRouteName="VehicleOwnerHome">
+    <Drawer.Navigator initialRouteName="VehicleOwnerTabs">
+      <Drawer.Screen name="VehicleOwnerTabs" component={VehicleOwnerTabs} />
       <Drawer.Screen name="VehicleOwnerHome" component={VehicleOwnerHome} />
       <Drawer.Screen name="Profile" component={ProfileScreen} />
       <Drawer.Screen name="Home" component={HomeScreen} />
@@ -332,6 +343,9 @@ export default function App() {
         {/* <Stack.Screen name="MechanicHome" component={MechanicHome} /> */}
         {/* <Stack.Screen name="VehicleOwnerHome" component={VehicleOwnerHome} /> */}
         <Stack.Screen name="MechanicOwnerDrawer" component={MechanicOwnerDrawer} />
+        <Stack.Screen name="SelectLocationScreen" component={SelectLocationScreen} />
+        <Stack.Screen name="VehicleOwnerTabs" component={VehicleOwnerTabs} />
+        <Stack.Screen name="MessagingScreen" component={MessagingScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

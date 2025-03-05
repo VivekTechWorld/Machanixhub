@@ -4,19 +4,19 @@ const Location = require("../models/Location");
 exports.saveLocation = async (req, res) => {
   try {
     const { latitude, longitude } = req.body;
-    console.log("latitude", latitude);
+    console.log("Latitude:", latitude);
 
     if (!latitude || !longitude) {
       return res.status(400).json({ message: "Latitude and Longitude are required." });
     }
 
     // Debugging: Check if req.vehicleOwner is populated
-    if (!req.vehicleOwner || !req.vehicleOwner._id) {
+    if (!req.userType && !req.user) {
       return res.status(401).json({ message: "Vehicle Owner ID is missing. Please authenticate." });
     }
-
+    console.log(req.user);
     const newLocation = new Location({
-      vehicleOwnerId: req.vehicleOwner._id, // Use vehicleOwnerId from the authenticated vehicle owner
+      vehicleOwnerId: req.user._id, // Use vehicleOwnerId from the authenticated vehicle owner
       latitude,
       longitude,
     });
