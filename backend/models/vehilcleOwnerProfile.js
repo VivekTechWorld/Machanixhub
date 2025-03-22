@@ -1,17 +1,16 @@
 const mongoose = require("mongoose");
 
-const MechanicProfileSchema = new mongoose.Schema({
-  MechanicOwnerid: {
+const vehicleOwnerProfileSchema = new mongoose.Schema({
+    vehicleOwnerId: {
       type: mongoose.Schema.Types.ObjectId, // Ensure this matches the type of your user IDs
-      ref: "Mechanic", // Reference to the User model (if applicable)
+      ref: "VechicleOwner", // Reference to the User model (if applicable)
       required: true,
     },
   name: { type: String},
-  specialization: { type: String },
-  experience: { type: String},
-  rating: { type: String, default: "0" },
-  reviews: { type: String, default: "0" },
-  phone: { type: String},
+  email: { type: String, required: true, unique: true },
+  phone: { type: String, required: true },
+  vehicleModel: { type: String },
+  vehicleNumber: { type: String },
   location: { 
     type: {
       type: String, 
@@ -25,4 +24,4 @@ const MechanicProfileSchema = new mongoose.Schema({
   profileImage: { type: String },
 });
 
-module.exports = mongoose.model("MechanicProfile", MechanicProfileSchema);
+module.exports = mongoose.model("vehicleOwnerProfile", vehicleOwnerProfileSchema);

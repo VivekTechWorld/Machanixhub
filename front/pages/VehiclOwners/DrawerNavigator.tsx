@@ -4,7 +4,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import VehicleOwnerHome from './VehicleOwnerDrawer';
 import MechanicHome from './MechanicHome';
-import ProfileScreen from './ProfileScreen';
+import ProfileScreen from './vehicleOwnersProfile';
 import { NavigationProps } from '../../src/navigationTypes';
 
 const Drawer = createDrawerNavigator();

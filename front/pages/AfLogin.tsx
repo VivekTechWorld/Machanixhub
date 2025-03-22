@@ -49,18 +49,28 @@ const AfLogin: React.FC<NavigationProps<'AfLogin'>> = ({ navigation }) => {
 
           const response=await fetch(apiUrl,{
             method:"POST",
-            headers:{"Content-Type":"application/json"},
+            headers:{"Content-Type":"application/json"},  
             body:JSON.stringify({email,password})
           });
 
           const data= await response.json();
           if(response.ok)
           {
-            await AsyncStorage.setItem("authToken",data.token);
-            await AsyncStorage.setItem("userRole", selectedRole); // Store user role
-            Alert.alert("Login Successful","",[
+            if (!data.token && data.role === "admin") {
+              // If no token is returned, assume it's an admin
+              Alert.alert("Login admin", "", [
+                { text: "OK", onPress: () => navigation.navigate("adminpage") },
+              ]);
+            }
+            else
+            {
+              await AsyncStorage.setItem("authToken",data.token);
+              await AsyncStorage.setItem("userRole", selectedRole); // Store user role
+              Alert.alert("Login Successful","",[
               {text:"OK",onPress:()=>navigation.navigate(selectedRole==="Mechanic"?"MechanicOwnerDrawer":"VehicleOwnerDrawer")}
             ]);
+            }
+            
           }
           else
           {
@@ -77,9 +87,6 @@ const AfLogin: React.FC<NavigationProps<'AfLogin'>> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
-
-     
-
       {/* Email Input */}
       <Text style={styles.label}>Email</Text>
       <TextInput
@@ -107,14 +114,11 @@ const AfLogin: React.FC<NavigationProps<'AfLogin'>> = ({ navigation }) => {
           selectedValue={selectedRole}
           onValueChange={(itemValue) => setSelectedRole(itemValue)}
           style={styles.picker}
-        >
+        > 
           <Picker.Item label="Mechanic" value="Mechanic" />
           <Picker.Item label="Vehicle Owner" value="VehicleOwner" />
         </Picker>
       </View>
-
-
-
       {/* Login Button (Color Changes Based on Role) */}
       <TouchableOpacity
         style={[styles.loginButton, { backgroundColor: selectedRole === 'Mechanic' ? '#FF5C5C' : '#007BFF' }]}

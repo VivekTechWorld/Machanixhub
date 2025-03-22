@@ -256,3 +256,31 @@ exports.saveLocation = async (req, res) => {
     res.status(500).json({ message: "Server error. Try again later." });
   }
 };
+
+
+// Get Vehicle Owner Profile
+exports.getProfile = async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "Unauthorized: No token provided." });
+    }
+    
+
+  const token = authHeader.split(" ")[1];
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  console.log("Decoded Token:", decoded); // Debugging
+
+    let mechanicProfile = await MechanicProfile.findOne({ mechanicId:decoded.MechanicOwnerid });
+
+    if (!mechanicProfile) return res.status(404).json({ error: "Profile not found" });
+
+    console.log("📩 Sent profile data:", mechanicProfile);
+    return res.json({ success: true, data: mechanicProfile });
+    
+  } catch (error) {
+    console.error("Error fetching mechanic profile:", error); // Log for debugging
+    res.status(500).json({ error: error.message });
+  }
+};
+

@@ -170,9 +170,10 @@ import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 
 // Import Screens
 import VehicleOwnerHome from "../VehiclOwners/VehicleOwnerHome";
-import ProfileScreen from "../../screens/ProfileScreen";
+// import ProfileScreen from "../../screens/ProfileScreen";
+import ProfileScreen from "../VehiclOwners/vehicleOwnersProfile";
 import FindMechanicScreen from "../VehiclOwners/FindMechanicScreen";
-import BookingScreen from "../VehiclOwners/BookingScreen";
+import BookingScreen from "../VehiclOwners/VehicleOwnerBookingTab";
 import MessagingScreen from "../../pages/MessagingScreen";
 
 // Create Bottom Tab Navigator
@@ -182,7 +183,7 @@ const Tab = createBottomTabNavigator();
 type RootTabParamList = {
   Home: undefined;
   "Find Mechanic": undefined;
-  MessagingScreen: undefined;
+  MessagingScreen: { senderId: string; receiverId: string };
   Bookings: undefined;
   Profile: undefined;
 };
@@ -216,8 +217,11 @@ const VehicleOwnerTabs = () => {
     const navigation = useNavigation<NavigationProps>();
 
   // ✅ Define handlePress in the correct scope
-  const handlePress = () => {
-    navigation.navigate("MessagingScreen");
+  const handlePress = (event: GestureResponderEvent) => {
+    navigation.navigate("MessagingScreen", {
+      senderId: "65f0b2e5a1f8a1c2d3e4f5g6",
+      receiverId: "65f0b3e6b2f9b2d4e5f6g7h8",
+    });
   };
 
   

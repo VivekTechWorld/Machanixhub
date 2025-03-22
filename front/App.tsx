@@ -244,13 +244,21 @@ import ResetPasswordScreen from "./pages/ResetPassword";
 import VehicleOwnerHome from "./pages/VehiclOwners/VehicleOwnerHome";
 import MechanicHome from "./pages/Mechanic/MechanicHome";
 import MechanicProfileScreen from "./pages/Mechanic/MechanicProfileScreen";
-import ProfileScreen from "./screens/ProfileScreen";
+// import mechanicProfileScreen from "./pages/Mechanic/EditProfile";
+import ProfileScreen from "./pages/VehiclOwners/EditProfile";
 import { RootStackParamList } from "./src/navigationTypes";
 import SelectLocationScreen from "./pages/SelectLocationScreen"; // Import the location screen
 import VehicleOwnerTabs from "./pages/navigation/VehicleOwnerTabs"; // Import the VehicleOwnerTabs screen
 import MessagingScreen from "./pages/MessagingScreen"; // Import the Messaging screen
-
-
+import MechanicTabs from "./pages/navigation/MechanicTabs";
+import chatScreen from "./pages/ChatScreen"; // ✅ Ensure this exists
+import SelectBooking from "./pages/VehiclOwners/SelectBooking";
+import adminHOmeScreen from "./pages/admin/HomeScreen";
+import adminVehicleOwnerScreen from "./pages/admin/VehicleOwnerScreen";
+import VehicleOwnerProfileScreen from "./pages/admin/VehicleOwnerProfileScreen";
+import MechanicScreen from "./pages/admin/MechanicScreen";
+import adminMechanicProfileScreen from "./pages/admin/MechanicProfileScreen";
+import ChatBotScreen from "./pages/ChatBotScreen";
 
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -281,7 +289,7 @@ const VehicleOwnerDrawer = () => {
     <Drawer.Navigator initialRouteName="VehicleOwnerTabs">
       <Drawer.Screen name="VehicleOwnerTabs" component={VehicleOwnerTabs} />
       <Drawer.Screen name="VehicleOwnerHome" component={VehicleOwnerHome} />
-      <Drawer.Screen name="Profile" component={ProfileScreen} />
+      <Drawer.Screen name="EditProfile" component={ProfileScreen} />
       <Drawer.Screen name="Home" component={HomeScreen} />
     </Drawer.Navigator>
   );
@@ -289,10 +297,13 @@ const VehicleOwnerDrawer = () => {
 
 const MechanicOwnerDrawer = () => {
   return (
-    <Drawer.Navigator initialRouteName="MechanicHome">
+    <Drawer.Navigator initialRouteName="MechanicTabs">
+      <Drawer.Screen name="MechanicTabs" component={MechanicTabs} />
       <Drawer.Screen name="MechanicHome" component={MechanicHome} />
       <Drawer.Screen name="Profile" component={MechanicProfileScreen} />
       <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen name="EditProfile" component={MechanicProfileScreen} />
+      <Drawer.Screen name="Ai Support" component={ChatBotScreen} />
     </Drawer.Navigator>
   );
 };
@@ -345,7 +356,16 @@ export default function App() {
         <Stack.Screen name="MechanicOwnerDrawer" component={MechanicOwnerDrawer} />
         <Stack.Screen name="SelectLocationScreen" component={SelectLocationScreen} />
         <Stack.Screen name="VehicleOwnerTabs" component={VehicleOwnerTabs} />
+        <Stack.Screen name="MechanicTabs" component={MechanicTabs} />     
         <Stack.Screen name="MessagingScreen" component={MessagingScreen} />
+        <Stack.Screen name="chat" component={chatScreen}/> 
+        <Stack.Screen name="SelectBooking" component={SelectBooking}/>
+        <Stack.Screen name="adminpage" component={adminHOmeScreen}/>
+        <Stack.Screen name="adminVehicleOwnerScreen" component={adminVehicleOwnerScreen}/>       
+        <Stack.Screen name="adminVehicleOwnerProfileScreen" component={VehicleOwnerProfileScreen}/>    
+        <Stack.Screen name="adminMechanicScreen" component={MechanicScreen}/>   
+        <Stack.Screen name="adminMechanicOwnerProfileScreen" component={adminMechanicProfileScreen}/>   
+
       </Stack.Navigator>
     </NavigationContainer>
   );
