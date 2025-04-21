@@ -243,7 +243,7 @@ const BookingScreen = () => {
       setMechanics(response.data.mechanics);
       setVehicleOwner(response.data.vehicleOwner);
     } catch (err) {
-      setError("Failed to load bookings");
+      setError("Failed to load booking");
     } finally {
       setLoading(false);
     }

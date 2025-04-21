@@ -202,7 +202,7 @@ exports.getChatMessages = async (req, res) => {
 exports.getMessages = async (req, res) => {
   try {
     const { senderId, receiverId } = req.params;
-
+    console.log(req.params); // Log the parameters for debugging
     // Validate ObjectId format
     if (!mongoose.Types.ObjectId.isValid(senderId) || !mongoose.Types.ObjectId.isValid(receiverId)) {
       return res.status(400).json({ error: "Invalid sender or receiver ID" });

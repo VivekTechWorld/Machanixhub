@@ -40,76 +40,111 @@
 
 
 // frontend/screens/MechanicHome.tsx
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
-import axios from 'axios';
-import { StackNavigationProp } from '@react-navigation/stack';
 
-// Define the types for navigation and data structure
-type MechanicHomeProps = {
-    navigation: StackNavigationProp<any>;
-};
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+  Alert,
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-type Booking = {
-    _id: string;
-    serviceType: string;
-    date: string;
-};
+const MechanicHome: React.FC<{ navigation: any }> = ({ navigation }) => {
+  const [name, setName] = useState("");
+  const [loading, setLoading] = useState(true);
 
-type MechanicDashboardData = {
-    mechanic: {
-        name: string;
-    };
-    pendingBookings: Booking[];
-    upcomingBookings: Booking[];
-    completedBookings: Booking[];
-};
+  useEffect(() => {
+    const fetchMechanicInfo = async () => {
+      const token = await AsyncStorage.getItem("authToken");
+      if (!token) {
+        navigation.replace("AfLogin");
+        return;
+      }
 
-const MechanicHome: React.FC<MechanicHomeProps> = ({ navigation }) => {
-    const [dashboardData, setDashboardData] = useState<MechanicDashboardData | null>(null);
-    const [loading, setLoading] = useState(true);
-    const mechanicId = '123456'; // Replace with dynamic mechanic ID
-
-    useEffect(() => {
-        fetchDashboard();
-    }, []);
-
-    const fetchDashboard = async () => {
-        try {
-            const response = await axios.get<MechanicDashboardData>(`http://localhost:5000/api/mechanics/dashboard/${mechanicId}`);
-            setDashboardData(response.data);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        } finally {
-            setLoading(false);
-        }
+      try {
+        const res = await fetch("http://10.0.2.2:5000/api/mechanic/profile", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        setName(data.name || "Mechanic");
+      } catch (err) {
+        console.error("Error fetching mechanic:", err);
+        Alert.alert("Error", "Unable to fetch mechanic data");
+      } finally {
+        setLoading(false);
+      }
     };
 
-    if (loading) {
-        return <ActivityIndicator size="large" color="#0000ff" />;
-    }
+    fetchMechanicInfo();
+  }, []);
 
+  if (loading) {
     return (
-        <View>
-            {dashboardData ? (
-                <>
-                    <Text>Welcome, {dashboardData.mechanic.name}</Text>
-                    <Text>Pending Requests: {dashboardData.pendingBookings.length}</Text>
-                    <FlatList
-                        data={dashboardData.pendingBookings}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity>
-                                <Text>{item.serviceType} - {item.date}</Text>
-                            </TouchableOpacity>
-                        )}
-                        keyExtractor={(item) => item._id}
-                    />
-                </>
-            ) : (
-                <Text>No Data Available</Text>
-            )}
-        </View>
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color="#4e73df" />
+      </View>
     );
+  }
+
+  return (
+    <ScrollView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.welcomeText}>Welcome {name} 👨‍🔧</Text>
+        <Text style={styles.subText}>Your Mechanic Dashboard</Text>
+      </View>
+
+      <View style={styles.quickActions}>
+        <ActionCard icon="clipboard-list" label="Service Requests" onPress={() => navigation.navigate("Approve Bookings")} />
+        <ActionCard icon="message-text" label="Chats" onPress={() => navigation.navigate("MessagingScreen")} />
+        <ActionCard icon="account" label="My Profile" onPress={() => navigation.navigate("Profile")} />
+        <ActionCard icon="history" label="Booking History" onPress={() => navigation.navigate("Bookings")} />
+        <ActionCard icon="robot" label="AI Gemini" onPress={() => navigation.navigate("Ai Support" )} />
+      </View>
+    </ScrollView>
+  );
 };
 
+const ActionCard = ({ icon, label, onPress }: { icon: string; label: string; onPress: () => void }) => (
+  <TouchableOpacity style={styles.actionCard} onPress={onPress}>
+    <Icon name={icon} size={30} color="#fff" />
+    <Text style={styles.cardText}>{label}</Text>
+  </TouchableOpacity>
+);
+const styles = StyleSheet.create({
+    container: { flex: 1, backgroundColor: "#fdf3f3" },
+    centered: { flex: 1, justifyContent: "center", alignItems: "center" },
+    header: { alignItems: "center", marginTop: 30, marginBottom: 20 },
+    welcomeText: { fontSize: 26, fontWeight: "bold", color: "#b71c1c" },
+    subText: { fontSize: 16, color: "#7f1d1d" },
+    quickActions: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      justifyContent: "space-around",
+      paddingHorizontal: 10,
+      paddingBottom: 30,
+    },
+    actionCard: {
+      backgroundColor: "#fa1111",
+      padding: 20,
+      borderRadius: 15,
+      alignItems: "center",
+      width: "40%",
+      marginVertical: 10,
+      elevation: 4,
+    },
+    cardText: {
+      color: "#fff",
+      marginTop: 8,
+      fontWeight: "bold",
+      fontSize: 13,
+      textAlign: "center",
+    },
+  });
+  
+  
 export default MechanicHome;

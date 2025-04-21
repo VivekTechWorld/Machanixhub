@@ -174,7 +174,9 @@ import VehicleOwnerHome from "../VehiclOwners/VehicleOwnerHome";
 import ProfileScreen from "../VehiclOwners/vehicleOwnersProfile";
 import FindMechanicScreen from "../VehiclOwners/FindMechanicScreen";
 import BookingScreen from "../VehiclOwners/VehicleOwnerBookingTab";
-import MessagingScreen from "../../pages/MessagingScreen";
+// import MessagingScreen from "../../pages/MessagingScreen";
+import MessagingScreenVehicleOwner from "../MessagingScreenVehicleOwner";
+
 
 // Create Bottom Tab Navigator
 const Tab = createBottomTabNavigator();
@@ -186,6 +188,7 @@ type RootTabParamList = {
   MessagingScreen: { senderId: string; receiverId: string };
   Bookings: undefined;
   Profile: undefined;
+  MessagingScreenVehicleOwner: undefined;
 };
 
 type NavigationProps = BottomTabNavigationProp<RootTabParamList>;
@@ -218,10 +221,7 @@ const VehicleOwnerTabs = () => {
 
   // ✅ Define handlePress in the correct scope
   const handlePress = (event: GestureResponderEvent) => {
-    navigation.navigate("MessagingScreen", {
-      senderId: "65f0b2e5a1f8a1c2d3e4f5g6",
-      receiverId: "65f0b3e6b2f9b2d4e5f6g7h8",
-    });
+    navigation.navigate('MessagingScreenVehicleOwner');
   };
 
   
@@ -258,8 +258,8 @@ const VehicleOwnerTabs = () => {
 
  {/* ✅ Pass handlePress as a prop */}
         <Tab.Screen
-          name="MessagingScreen"
-          component={MessagingScreen}
+          name="MessagingScreenVehicleOwner"
+          component={MessagingScreenVehicleOwner}
           options={{
             tabBarButton: (props) => (
               <FloatingTabButton {...props} onPress={handlePress} />

@@ -3,62 +3,110 @@ const MechanicProfile  =require("../models/Profile")
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 // Save user location
-exports.saveProfile= async (req, res) => {
-    try {
-      const { name, specialization, experience, phone, profileImage } = req.body;
+// exports.saveProfile= async (req, res) => {
+//     try {
+//       const { name, specialization, experience, phone, profileImage } = req.body;
       
-      // Extract token from headers
-      const authHeader = req.headers.authorization;
-      if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res.status(401).json({ message: "Unauthorized: No token provided." });
-      }
+//       // Extract token from headers
+//       const authHeader = req.headers.authorization;
+//       if (!authHeader || !authHeader.startsWith("Bearer ")) {
+//         return res.status(401).json({ message: "Unauthorized: No token provided." });
+//       }
       
-      console.log("api are correct in saveprofile")
+//       console.log("api are correct in saveprofile")
+//     const token = authHeader.split(" ")[1];
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//     console.log("Decoded Token:", decoded); // Debugging
+
+//     if (!decoded.id) {
+//       return res.status(401).json({ message: "Invalid token: Mechanic ID not found." });
+//     }
+
+//     const mechanicId = decoded.id.toString();
+//     console.log("Mechanic ID:", mechanicId); // Debugging
+
+
+//         if (!profileImage) {
+//           return res.status(400).json({ message: "Profile image is required" });
+//         }
+
+//         let mechanicProfile = await MechanicProfile.findOne({ MechanicOwnerid:mechanicId });
+
+//         mechanicProfile = new MechanicProfile({
+//           MechanicOwnerid: mechanicId,
+//           profileImage: profileImage || "", // Provide a value or default
+//           phone: phone || "", // Provide a value or default
+//           experience: experience || "", // Provide a value or default
+//           specialization: specialization || "", // Provide a value or default
+//           name: name || "", // Provide a value or default
+//         });
+        
+//         await mechanicProfile.save();
+//         res.status(201).json({ message: "Mechanic profile saved", mechanicProfile });
+//       } catch (error) {
+//         console.log(error);
+//         res.status(500).json({ message: "Error saving profile", error: error.message });
+//       }
+// };
+
+exports.saveProfile = async (req, res) => {
+  try {
+    const { name, specialization, experience, phone, profileImage } = req.body;
+
+    // Validate required fields
+    if (!name || !specialization || !experience || !phone || !profileImage) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+
+    // Extract token from headers
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "Unauthorized: No token provided." });
+    }
+
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Decoded Token:", decoded); // Debugging
+    console.log("Decoded Token:", decoded);
 
     if (!decoded.id) {
       return res.status(401).json({ message: "Invalid token: Mechanic ID not found." });
     }
 
     const mechanicId = decoded.id.toString();
-    console.log("Mechanic ID:", mechanicId); // Debugging
 
+    // Check if a profile already exists
+    let mechanicProfile = await MechanicProfile.findOne({ MechanicOwnerid: mechanicId });
 
-        if (!profileImage) {
-          return res.status(400).json({ message: "Profile image is required" });
-        }
+    if (!mechanicProfile) {
+      // Create new profile
+      mechanicProfile = new MechanicProfile({
+        MechanicOwnerid: mechanicId,
+        name,
+        specialization,
+        experience,
+        phone,
+        profileImage,
+      });
+    } else {
+      // Update existing profile
+      mechanicProfile.name = name;
+      mechanicProfile.specialization = specialization;
+      mechanicProfile.experience = experience;
+      mechanicProfile.phone = phone;
+      mechanicProfile.profileImage = profileImage;
+    }
 
-        let mechanicProfile = await MechanicProfile.findOne({ MechanicOwnerid:mechanicId });
+    await mechanicProfile.save();
 
-        mechanicProfile = new MechanicProfile({
-          MechanicOwnerid: mechanicId,
-          profileImage: profileImage || "", // Provide a value or default
-          phone: phone || "", // Provide a value or default
-          experience: experience || "", // Provide a value or default
-          specialization: specialization || "", // Provide a value or default
-          name: name || "", // Provide a value or default
-          // location: {
-          //   type: "Point",
-          //   coordinates: [latitude, longitude],
-          // },
-        });
+    res.status(201).json({
+      message: "Mechanic profile saved successfully",
+      mechanicProfile,
+    });
 
-        // const mechanic = new MechanicProfile({
-        //   name,
-        //   specialization,
-        //   experience,
-        //   phone,
-        //   profileImage, // Only storing the image URL
-        // });
-    
-        await mechanicProfile.save();
-        res.status(201).json({ message: "Mechanic profile saved", mechanicProfile });
-      } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Error saving profile", error: error.message });
-      }
+  } catch (error) {
+    console.error("Error saving mechanic profile:", error);
+    res.status(500).json({ message: "Error saving mechanic profile", error: error.message });
+  }
 };
 
 
@@ -270,8 +318,8 @@ exports.getProfile = async (req, res) => {
   const token = authHeader.split(" ")[1];
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   console.log("Decoded Token:", decoded); // Debugging
-
-    let mechanicProfile = await MechanicProfile.findOne({ mechanicId:decoded.MechanicOwnerid });
+  console.log('id',decoded.id);
+    let mechanicProfile = await MechanicProfile.findOne({ MechanicOwnerid:decoded.id });
 
     if (!mechanicProfile) return res.status(404).json({ error: "Profile not found" });
 

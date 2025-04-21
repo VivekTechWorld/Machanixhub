@@ -277,6 +277,7 @@ const EditProfileScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     launchImageLibrary({ mediaType: "photo", quality: 1 }, async (response) => {
       if (response.didCancel) return;
       if (response.errorMessage) {
+        console.log("Error selecting image:", response.errorMessage);
         Alert.alert("Error", "Failed to select image");
         return;
       }
@@ -309,6 +310,7 @@ const EditProfileScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
       if (res.data.secure_url) {
         setProfile((prev) => ({ ...prev, profileImage: res.data.secure_url }));
       } else {
+        console.log(res.data);
         Alert.alert("Error", "Image upload failed");
       }
     } catch (error) {
@@ -352,6 +354,7 @@ const EditProfileScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
       // navigation.navigate("VehicleOwnerHome");
       navigation.replace("VehicleOwnerTabs", { screen: "Profile", refresh: Date.now() });
     } catch (error) {
+      console.log('error in edit profile',error);
       Alert.alert("Error", "Failed to update profile");
     }
   };

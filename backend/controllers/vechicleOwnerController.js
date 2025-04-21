@@ -130,7 +130,7 @@ exports.updateProfile = async (req, res) => {
   try {
     console.log('📩 Incoming profile data:', req.body);
     const { name, phone, vehicleModel, vehicleNumber, profileImage } = req.body;
-
+      
     const updatedProfile = await VehicleOwnerProfile.findOneAndUpdate(
       { vehicleOwnerId: req.user._id },
       { name, phone, vehicleModel, vehicleNumber, profileImage },
@@ -161,7 +161,6 @@ exports.updateLocation = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
 
 // Save user location
 exports.saveProfile= async (req, res) => {

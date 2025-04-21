@@ -764,7 +764,7 @@ import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, StyleSheet }
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const API_URL = "http://10.0.2.2:5000/api/messages"; // ✅ Correct API Endpoint
+const API_URL = "http://10.0.2.2:5000/messages"; // ✅ Correct API Endpoint
 
 interface ChatUser {
   id: string;
@@ -809,7 +809,7 @@ const ChatListScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
         return;
       }
 
-      const mechanicId = response.data.MechanicOwnerid; // ✅ Correctly accessing user ID
+      const mechanicId = response.data.data.MechanicOwnerid; // ✅ Correctly accessing user ID
       console.log("✅ Mechanic ID fetched:", mechanicId);
       setUserId(mechanicId);
     } catch (error) {
@@ -837,7 +837,7 @@ const ChatListScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Chats</Text>
+      <Text style={styles.header}>Mechanic chats</Text>
       {loading ? (
         <ActivityIndicator size="large" color="blue" />
       ) : error ? (
@@ -851,13 +851,16 @@ const ChatListScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.card}
+
               onPress={() =>
-                navigation.navigate("ChatScreen", {
-                  senderId: userId,
-                  receiverId: item.id,
-                })
+                // navigation.navigate("MechanicMessageScreen", {
+                //   senderId: userId,
+                //   receiverId: item.id,
+                // })
+                navigation.navigate("MechanicMessageScreen", { mechanicId:item.id, mechanicName: item.name })
               }
             >
+              <Text style={styles.name}>{item.id}</Text>
               <Text style={styles.name}>{item.name}</Text>
               <Text style={styles.userType}>{item.type === "vehicleOwner" ? "🚗 Vehicle Owner" : "🔧 Mechanic"}</Text>
             </TouchableOpacity>

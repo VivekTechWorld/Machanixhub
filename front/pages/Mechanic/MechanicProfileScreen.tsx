@@ -310,8 +310,8 @@ const uploadImage = async (imageUri: string) => {
 
       console.log("✅ Profile saved:", response.data);
       Alert.alert("Success", "Profile created successfully!");
-      navigation.navigate("MechanicHome");
-
+      // navigation.navigate("MechanicTabs", { screen: "Profile", refresh: Date.now()});
+      navigation.replace("MechanicTabs", { screen: "Profile", refresh: Date.now() });
     } catch (error) {
       console.log(error);
       Alert.alert("Error", "Failed to create profile");

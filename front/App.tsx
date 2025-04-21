@@ -259,6 +259,8 @@ import VehicleOwnerProfileScreen from "./pages/admin/VehicleOwnerProfileScreen";
 import MechanicScreen from "./pages/admin/MechanicScreen";
 import adminMechanicProfileScreen from "./pages/admin/MechanicProfileScreen";
 import ChatBotScreen from "./pages/ChatBotScreen";
+import MechanicMessageScreen from "./pages/Mechanic/MechanicMessageScreen";
+import MessagingScreenVehicleOwner from "./pages/MessagingScreenVehicleOwner";
 
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -291,6 +293,7 @@ const VehicleOwnerDrawer = () => {
       <Drawer.Screen name="VehicleOwnerHome" component={VehicleOwnerHome} />
       <Drawer.Screen name="EditProfile" component={ProfileScreen} />
       <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen name="Ai Support" component={ChatBotScreen} />
     </Drawer.Navigator>
   );
 };
@@ -359,6 +362,8 @@ export default function App() {
         <Stack.Screen name="MechanicTabs" component={MechanicTabs} />     
         <Stack.Screen name="MessagingScreen" component={MessagingScreen} />
         <Stack.Screen name="chat" component={chatScreen}/> 
+        <Stack.Screen name="MechanicMessageScreen" component={MechanicMessageScreen}/> 
+        <Stack.Screen name="MessagingScreenVehicleOwner" component={MessagingScreenVehicleOwner}/> 
         <Stack.Screen name="SelectBooking" component={SelectBooking}/>
         <Stack.Screen name="adminpage" component={adminHOmeScreen}/>
         <Stack.Screen name="adminVehicleOwnerScreen" component={adminVehicleOwnerScreen}/>       

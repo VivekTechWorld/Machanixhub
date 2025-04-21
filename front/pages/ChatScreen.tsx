@@ -279,7 +279,7 @@ type Message = {
   id: string;
   senderId: string;
   text: string;
-  timestamp: string;
+  createdAt: string;
 };
 
 const ChatScreen: React.FC = () => {
@@ -358,7 +358,7 @@ const ChatScreen: React.FC = () => {
     };
 
     socket.emit("sendMessage", messageData);
-    setMessages([...messages, { id: Date.now().toString(), ...messageData, timestamp: new Date().toISOString() }]);
+    setMessages([...messages, { id: Date.now().toString(), ...messageData, createdAt: new Date().toISOString() }]);
     setNewMessage("");
   };
 
@@ -374,9 +374,9 @@ const ChatScreen: React.FC = () => {
         <Text style={styles.messageText}>{item.text}</Text>
         
         {/* ✅ Display formatted timestamp */}
-        {item.timestamp && (
+        {item.createdAt && (
           <Text style={styles.timestamp}>
-            {new Date(item.timestamp).toLocaleTimeString("en-US", { 
+            {new Date(item.createdAt).toLocaleTimeString("en-US", { 
               hour: "2-digit", 
               minute: "2-digit", 
               hour12: true 

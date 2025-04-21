@@ -26,6 +26,7 @@ exports.getAllVehicleOwnerProfiles = async (req, res) => {
 exports.getVehicleOwnerProfileById = async (req, res) => {
     try {
         const profile = await VehicleOwnerProfile.findById(req.params.id);
+        console.log("fetched successfully",req.params.id);
         if (!profile) {
             return res.status(404).json({ error: 'Profile not found' });
         }

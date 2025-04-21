@@ -27,6 +27,8 @@ export type RootStackParamList = {
   adminVehicleOwnerProfileScreen :undefined;
   adminMechanicScreen :undefined;
   adminMechanicOwnerProfileScreen :undefined;
+  MechanicMessageScreen :undefined;
+  MessagingScreenVehicleOwner :undefined;
 };
 
 // ✅ Create a reusable type for navigation props

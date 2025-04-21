@@ -104,7 +104,7 @@ exports.getMechanicBookings = async (req, res) => {
         if (!mechanicId) {
           return res.status(400).json({ success: false, message: "Mechanic ID is required" });
         }
-        const bookings = await Booking.find({ mechanicId });
+        const bookings = await Booking.find({ mechanicId,status:'pending' });
         res.json({ success: true, bookings });
       } catch (error) {
         console.error("Error fetching bookings:", error);
@@ -240,7 +240,7 @@ exports.getVehicleApprovedBookings = async (req, res) => {
 
     // ✅ Find all approved bookings (use find() instead of findOne())
     const approvedBookings = await Booking.find({ vehicleOwnerId, status: "approved" });
-
+    console.log("🚗 Approved bookings found:", approvedBookings);
     if (!approvedBookings || approvedBookings.length === 0) {
       return res.status(404).json({ success: false, message: "No approved bookings found" });
     }

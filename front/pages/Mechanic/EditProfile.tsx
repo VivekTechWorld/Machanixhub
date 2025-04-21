@@ -142,8 +142,9 @@ const EditProfileScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
       });
 
       Alert.alert("Success", "Profile updated successfully!");
-      navigation.navigate("VehicleOwnerHome");
-
+      // navigation.navigate("VehicleOwnerHome");
+      // navigation.navigat("MechanicTabs", { screen: "Profile", refresh: Date.now() });
+      navigation.replace("MechanicTabs", { screen: "Profile", refresh: Date.now() });
     } catch (error) {
       Alert.alert("Error", "Failed to update profile");
     }
@@ -151,7 +152,7 @@ const EditProfileScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Edit the profile mechanic </Text>
+      <Text style={styles.header}>Edit the profile mechanic for exist or not </Text>
       <TextInput placeholder="Full Name" style={styles.input} onChangeText={(text) => handleChange("name", text)} value={profile.name || ""} />
       <TextInput placeholder="Email" style={styles.input} keyboardType="email-address" onChangeText={(text) => handleChange("email", text)} value={profile.email || ""} />
       <TextInput placeholder="Phone Number" style={styles.input} keyboardType="phone-pad" onChangeText={(text) => handleChange("phone", text)} value={profile.phone || ""} />
