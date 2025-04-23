@@ -22,7 +22,7 @@ const ChatBotScreen: React.FC = () => {
           }
         ]
       };
-      const URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyAmCcSei7xIAexb9-s1HsPSwXADW0HGv9k`;
+      const URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:gemeni_api`;
     try {
         const response = await axios.post(URL, requestData, {
             headers: {
